@@ -1,0 +1,40 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      - "POSTGRES_PASSWORD=/run/secrets/pg_pwd"
+      - "POSTGRES_USER=/run/secrets/pg_usr"
+      - "POSTGRES_DB=/run/secrets/pg_db"
+    secrets:
+      - pg_pwd
+      - pg_usr
+      - pg_db
+  
+  app:
+    build: .
+    ports: 
+      - 8000:8000
+    links:
+      - db
+    restart: unless-stopped
+    environment:
+      - PG_HOST=db
+      - PG_USR=/run/secrets/pg_usr
+      - PG_PWD=/run/secrets/pg_pwd
+      - PG_DB=/run/secrets/pg_db
+    secrets:
+      - pg_pwd
+      - pg_usr
+      - pg_db
+
+secrets:
+  pg_pwd:
+    file: './pg_pwd.txt'
+  pg_usr:
+    file: './pg_usr.txt'
+  pg_db:
+    file: './pg_db.txt'
+
