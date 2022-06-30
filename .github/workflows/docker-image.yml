@@ -1,0 +1,34 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v2.0.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USER}}
+        password: ${{ secrets.DOCKERHUB_TOKEN}}
+    
+  # You may pin to the exact commit or the version.
+  # uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8
+    - name: Publish 
+      uses: docker/build-push-action@v3.0.0
+      with:   
+        context: .
+        file: dockerfile
+        target: spraus/omni-test
+        tags: latest
+        push: true
