@@ -33,5 +33,5 @@ jobs:
       with:   
         context: .
         push: true
-        tags: latest
+        tags: spraus/omni-test:latest
         labels: ${{ steps.meta.outputs.labels }}
