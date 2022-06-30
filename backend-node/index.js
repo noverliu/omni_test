@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import Koa from 'koa';
 import Router from 'koa-router';
 import Shorten from './models/shorten.js';
@@ -56,6 +57,10 @@ router.get('/:key', async ctx => {
     }
   });
   if (shorten) {
+    let target = shorten.originLink;
+    if (!target.startsWith('http')) {
+      target = `${ctx.protocol}://${target.originLink}`;
+    }
     ctx.redirect(shorten.originLink);
   } else {
     ctx.status = 404;

@@ -28,7 +28,10 @@ const reducer = (state, action) => {
         loaded: true
       };
     case ACT.DELETE:
-      oldList.splice(oldList.findIndex(x => x.shorten === action.shorten), 1);
+      const index = oldList.findIndex(x => x.shortKey === action.shorten.shortKey);
+      if (index > -1) {
+        oldList.splice(index, 1);
+      }
       return {
         list: oldList,
         loaded: true
